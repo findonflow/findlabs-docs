@@ -1,0 +1,525 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "An Api to allow users to fetch historical data form the findlabs database. All timestamps are in UTC.",
+    "title": "Flowdiver historical API",
+    "version": "1.0.0",
+    "contact": {
+      "name": "FindLabs Support",
+      "email": "support@findlabs.io",
+      "url": "http://roadmap.findlabs.io"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.findlabs.io/historical/api/rest",
+      "variables": {},
+      "description": "Findlabs"
+    }
+  ],
+  "security": [],
+  "paths": {
+    "/blocks": {
+      "get": {
+        "operationId": "getBlockByHeight",
+        "summary": "Blocks",
+        "description": "Get 100 blocks since blockheight in decending order offset by the specified amount if any",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/height"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "blocks": {
+                      "items": {
+                        "description": "columns and relationships of \"blocks\"",
+                        "properties": {
+                          "height": {
+                            "$ref": "#/components/schemas/height"
+                          },
+                          "id": {
+                            "$ref": "#/components/schemas/hash"
+                          },
+                          "timestamp": {
+                            "$ref": "#/components/schemas/timestamptz"
+                          },
+                          "tx": {
+                            "$ref": "#/components/schemas/numeric"
+                          }
+                        },
+                        "title": "blocks",
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Responses for GET /blocks",
+            "headers": {
+              "x-ratelimit-limit-minute": {
+                "$ref": "#/components/headers/x-ratelimit-limit-minute"
+              },
+              "x-ratelimit-limit-second": {
+                "$ref": "#/components/headers/x-ratelimit-limit-second"
+              },
+              "x-ratelimit-remaining-minute": {
+                "$ref": "#/components/headers/x-ratelimit-remaining-minute"
+              },
+              "x-ratelimit-remaining-second": {
+                "$ref": "#/components/headers/x-ratelimit-remaining-second"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events": {
+      "get": {
+        "operationId": "getEventsByNameBeforeHeight",
+        "summary": "Events",
+        "description": "Get events by name in decending order",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/height"
+          },
+          {
+            "$ref": "#/components/parameters/name"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "events": {
+                      "items": {
+                        "description": "columns and relationships of \"events\"",
+                        "properties": {
+                          "block_height": {
+                            "$ref": "#/components/schemas/height"
+                          },
+                          "event_index": {
+                            "$ref": "#/components/schemas/numeric"
+                          },
+                          "fields": {
+                            "$ref": "#/components/schemas/event"
+                          },
+                          "name": {
+                            "$ref": "#/components/schemas/eventName"
+                          },
+                          "timestamp": {
+                            "$ref": "#/components/schemas/timestamptz"
+                          },
+                          "transaction_hash": {
+                            "$ref": "#/components/schemas/hash"
+                          }
+                        },
+                        "title": "events",
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Responses for GET /events",
+            "headers": {
+              "x-ratelimit-limit-minute": {
+                "$ref": "#/components/headers/x-ratelimit-limit-minute"
+              },
+              "x-ratelimit-limit-second": {
+                "$ref": "#/components/headers/x-ratelimit-limit-second"
+              },
+              "x-ratelimit-remaining-minute": {
+                "$ref": "#/components/headers/x-ratelimit-remaining-minute"
+              },
+              "x-ratelimit-remaining-second": {
+                "$ref": "#/components/headers/x-ratelimit-remaining-second"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transaction": {
+      "get": {
+        "summary": "Transaction",
+        "operationId": "getTransactionById",
+        "description": "Get a transation by id with the first 100 events. use /transaction/events to get the rest if any",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "transactions": {
+                      "items": {
+                        "description": "columns and relationships of \"transactions\"",
+                        "properties": {
+                          "argument": {
+                            "$ref": "#/components/schemas/argument"
+                          },
+                          "authorizers": {
+                            "$ref": "#/components/schemas/authorizers"
+                          },
+                          "block_height": {
+                            "$ref": "#/components/schemas/height"
+                          },
+                          "block_id": {
+                            "$ref": "#/components/schemas/hash"
+                          },
+                          "error": {
+                            "example": "[Error Code: 1101] error caused by: 1 error occurred: * transaction execute failed: [Error Code: 1101] cadence runtime error:",
+                            "type": "string"
+                          },
+                          "error_code": {
+                            "example": "1011",
+                            "type": "string"
+                          },
+                          "events": {
+                            "items": {
+                              "description": "events in an transaction",
+                              "properties": {
+                                "event_index": {
+                                  "$ref": "#/components/schemas/numeric"
+                                },
+                                "fields": {
+                                  "$ref": "#/components/schemas/event"
+                                },
+                                "name": {
+                                  "$ref": "#/components/schemas/eventName"
+                                }
+                              },
+                              "title": "events",
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
+                          "events_aggregate": {
+                            "description": "the number of events in total in this transaction\"",
+                            "properties": {
+                              "aggregate": {
+                                "properties": {
+                                  "count": {
+                                    "title": "Int",
+                                    "type": "integer",
+                                    "example": 5
+                                  }
+                                },
+                                "title": "events_aggregate_fields",
+                                "type": "object"
+                              }
+                            },
+                            "title": "events_aggregate",
+                            "type": "object"
+                          },
+                          "fee": {
+                            "title": "numeric",
+                            "example": 0.000012,
+                            "type": "double"
+                          },
+                          "gas_limit": {
+                            "type": "integer",
+                            "example": 9999
+                          },
+                          "gas_used": {
+                            "type": "integer",
+                            "example": 456
+                          },
+                          "id": {
+                            "$ref": "#/components/schemas/hash"
+                          },
+                          "payer": {
+                            "$ref": "#/components/schemas/user"
+                          },
+                          "proposer": {
+                            "$ref": "#/components/schemas/user"
+                          },
+                          "proposer_index": {
+                            "type": "integer",
+                            "example": 0
+                          },
+                          "proposer_sequence_number": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "status": {
+                            "title": "String",
+                            "type": "string",
+                            "example": "SEALED"
+                          },
+                          "timestamp": {
+                            "$ref": "#/components/schemas/timestamptz"
+                          },
+                          "transaction_body": {
+                            "description": "columns and relationships of \"transaction_bodies\"",
+                            "properties": {
+                              "body": {
+                                "example": "the body of the transaction",
+                                "title": "String",
+                                "type": "string"
+                              }
+                            },
+                            "title": "transaction_bodies",
+                            "type": "object"
+                          }
+                        },
+                        "title": "transactions",
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Responses for GET /transaction",
+            "headers": {
+              "x-ratelimit-limit-minute": {
+                "$ref": "#/components/headers/x-ratelimit-limit-minute"
+              },
+              "x-ratelimit-limit-second": {
+                "$ref": "#/components/headers/x-ratelimit-limit-second"
+              },
+              "x-ratelimit-remaining-minute": {
+                "$ref": "#/components/headers/x-ratelimit-remaining-minute"
+              },
+              "x-ratelimit-remaining-second": {
+                "$ref": "#/components/headers/x-ratelimit-remaining-second"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transaction/event": {
+      "get": {
+        "operationId": "getTransactionEvents",
+        "summary": "Events for Transaction",
+        "description": "Get events for a transaction, used in case a transaction has more then a 100 of them",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tid"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "events": {
+                      "items": {
+                        "properties": {
+                          "event_index": {
+                            "$ref": "#/components/schemas/numeric"
+                          },
+                          "fields": {
+                            "$ref": "#/components/schemas/event"
+                          },
+                          "name": {
+                            "$ref": "#/components/schemas/eventName"
+                          }
+                        },
+                        "title": "events",
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Responses for GET /transaction/event",
+            "headers": {
+              "x-ratelimit-limit-minute": {
+                "$ref": "#/components/headers/x-ratelimit-limit-minute"
+              },
+              "x-ratelimit-limit-second": {
+                "$ref": "#/components/headers/x-ratelimit-limit-second"
+              },
+              "x-ratelimit-remaining-minute": {
+                "$ref": "#/components/headers/x-ratelimit-remaining-minute"
+              },
+              "x-ratelimit-remaining-second": {
+                "$ref": "#/components/headers/x-ratelimit-remaining-second"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "headers": {
+      "x-ratelimit-limit-minute": {
+        "description": "Request limit per minute per ip",
+        "schema": {
+          "type": "integer"
+        },
+        "example": 60
+      },
+      "x-ratelimit-limit-second": {
+        "description": "Request limit per second per ip",
+        "schema": {
+          "type": "integer"
+        },
+        "example": 2
+      },
+      "x-ratelimit-remaining-minute": {
+        "description": "Request limit per minute per ip remaining",
+        "schema": {
+          "type": "integer"
+        },
+        "example": 59
+      },
+      "x-ratelimit-remaining-second": {
+        "description": "Request limit per second per ip remaining",
+        "schema": {
+          "type": "integer"
+        },
+        "example": 1
+      }
+    },
+    "parameters": {
+      "tid": {
+        "in": "query",
+        "name": "transaction_id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "example": "3b456a38d04fdb6ca285db39936b7a74fccbefa2f0fea9a8ef57c4d67fdfdfca"
+      },
+      "id": {
+        "in": "query",
+        "name": "id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "example": "3b456a38d04fdb6ca285db39936b7a74fccbefa2f0fea9a8ef57c4d67fdfdfca"
+      },
+      "name": {
+        "in": "query",
+        "name": "name",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "example": "A.f8d6e0586b0a20c7.ExampleNFT.Withdraw"
+      },
+      "height": {
+        "description": "block height",
+        "in": "query",
+        "name": "height",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "example": 63253147
+      },
+      "offset": {
+        "description": "Set offset to get later pages, should be in increments of 100",
+        "in": "query",
+        "name": "offset",
+        "schema": {
+          "default": 0,
+          "type": "integer"
+        },
+        "example": 100
+      }
+    },
+    "schemas": {
+      "eventName": {
+        "type": "string",
+        "example": "A.f8d6e0586b0a20c7.ExampleNFT.Withdraw"
+      },
+      "event": {
+        "type": "object",
+        "example": {
+          "from": "0xf8d6e0586b0a20c7",
+          "id": 123
+        }
+      },
+      "user": {
+        "type": "string",
+        "format": "string",
+        "example": "0xf8d6e0586b0a20c7"
+      },
+      "argument": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        },
+        "example": [
+          {
+            "recipient": "0xf8d6e0586b0a20c7"
+          },
+          {
+            "id": 123
+          }
+        ]
+      },
+      "authorizers": {
+        "type": "array",
+        "example": [
+          "0xf8d6e0586b0a20c7",
+          "0xf8d6e0586b0a20c6"
+        ],
+        "items": {
+          "type": "string"
+        }
+      },
+      "height": {
+        "type": "integer",
+        "format": "int64",
+        "example": 63253147
+      },
+      "hash": {
+        "type": "string",
+        "example": "3b456a38d04fdb6ca285db39936b7a74fccbefa2f0fea9a8ef57c4d67fdfdfca",
+        "title": "string"
+      },
+      "timestamptz": {
+        "type": "string",
+        "format": "date-string",
+        "example": "2023-10-18 19:43:18.631339+00",
+        "title": "timestamptz"
+      },
+      "numeric": {
+        "title": "numeric",
+        "example": 3,
+        "type": "integer"
+      }
+    }
+  }
+}
