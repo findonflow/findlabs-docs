@@ -57,6 +57,19 @@
                           },
                           "tx": {
                             "$ref": "#/components/schemas/numeric"
+                          },
+                          "transactions": {
+                            "items": {
+                              "description": "transactions in a block",
+                              "properties": {
+                                "id": {
+                                  "$ref": "#/components/schemas/hash"
+                                }
+                              },
+                              "title": "transactions",
+                              "type": "object"
+                            },
+                            "type": "array"
                           }
                         },
                         "title": "blocks",

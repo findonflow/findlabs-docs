@@ -40,6 +40,15 @@ paths:
                           $ref: '#/components/schemas/timestamptz'
                         tx:
                           $ref: '#/components/schemas/numeric'
+                        transactions:
+                          items:
+                            description: transactions in a block
+                            properties:
+                              id:
+                                $ref: '#/components/schemas/hash'
+                            title: transactions
+                            type: object
+                          type: array
                       title: blocks
                       type: object
                     type: array
@@ -144,6 +153,7 @@ paths:
                             title: events
                             type: object
                           type: array
+
                         events_aggregate:
                           description: the number of events in total in this transaction"
                           properties:
