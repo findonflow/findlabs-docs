@@ -170,7 +170,7 @@ paths:
                         fee:
                           title: numeric
                           example: 0.000012
-                          type: double
+                          type: number
                         gas_limit:
                           type: integer
                           example: 9999
@@ -255,6 +255,99 @@ paths:
               $ref: '#/components/headers/x-ratelimit-remaining-minute'
             x-ratelimit-remaining-second: 
               $ref: '#/components/headers/x-ratelimit-remaining-second'
+
+  /rewards:
+    get:
+      operationId: rewards
+      summary: Delegated staking rewards
+      description: >-
+        Get delegated staking reward for a user for a given time
+      parameters:
+        -  $ref: '#/components/parameters/user'
+        -  $ref: '#/components/parameters/from'
+        -  $ref: '#/components/parameters/to'
+        -  $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  events:
+                    items:
+                      properties:
+                        nodeid:
+                          $ref: '#/components/schemas/string'
+                        delegatorid:
+                          $ref: '#/components/schemas/string'
+                        block_height:
+                          $ref: '#/components/schemas/height'
+                        amount:
+                          $ref: '#/components/schemas/numeric'
+                        address:
+                          $ref: '#/components/schemas/user'
+                        timestamp:
+                          $ref: '#/components/schemas/timestamptz'
+                      title: delegator_rewards
+                      type: object
+                    type: array
+          description: Responses for GET /rewards
+          headers:
+            x-ratelimit-limit-minute: 
+              $ref: '#/components/headers/x-ratelimit-limit-minute'
+            x-ratelimit-limit-second: 
+              $ref: '#/components/headers/x-ratelimit-limit-second'
+            x-ratelimit-remaining-minute: 
+              $ref: '#/components/headers/x-ratelimit-remaining-minute'
+            x-ratelimit-remaining-second: 
+              $ref: '#/components/headers/x-ratelimit-remaining-second'
+
+
+  /node_rewards:
+    get:
+      operationId: nodeRewards
+      summary: Staking rewards
+      description: >-
+        Get taking reward for a node operator for a given time
+      parameters:
+        -  $ref: '#/components/parameters/user'
+        -  $ref: '#/components/parameters/from'
+        -  $ref: '#/components/parameters/to'
+        -  $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  events:
+                    items:
+                      properties:
+                        nodeid:
+                          $ref: '#/components/schemas/string'
+                        block_height:
+                          $ref: '#/components/schemas/height'
+                        amount:
+                          $ref: '#/components/schemas/numeric'
+                        address:
+                          $ref: '#/components/schemas/user'
+                        timestamp:
+                          $ref: '#/components/schemas/timestamptz'
+                      title: staking_rewards
+                      type: object
+                    type: array
+          description: Responses for GET /node_rewards
+          headers:
+            x-ratelimit-limit-minute: 
+              $ref: '#/components/headers/x-ratelimit-limit-minute'
+            x-ratelimit-limit-second: 
+              $ref: '#/components/headers/x-ratelimit-limit-second'
+            x-ratelimit-remaining-minute: 
+              $ref: '#/components/headers/x-ratelimit-remaining-minute'
+            x-ratelimit-remaining-second: 
+              $ref: '#/components/headers/x-ratelimit-remaining-second'
+
+
 components:
   headers:
     x-ratelimit-limit-minute: 
@@ -299,6 +392,13 @@ components:
       schema:
         type: string
       example: A.f8d6e0586b0a20c7.ExampleNFT.Withdraw
+    user:
+      in: query
+      name: user
+      required: true
+      schema:
+        type: string
+      example: "0x886f3aeaf848c535"
     height:
       description: block height
       in: query
@@ -316,6 +416,22 @@ components:
         default: 0
         type: integer
       example: 100
+    from:
+      in: query
+      required: true
+      schema: 
+        type: string
+        default: "2023-01-01"
+      name: from
+      example: "2023-01-01"
+    to:
+      in: query
+      required: true
+      schema: 
+        type: string
+        default: "2023-12-31"
+      name: to
+      example: "2023-12-31"
   schemas:
     eventName:
       type: string
@@ -344,6 +460,10 @@ components:
     hash:
       type: string
       example: 3b456a38d04fdb6ca285db39936b7a74fccbefa2f0fea9a8ef57c4d67fdfdfca
+      title: string
+    string:
+      type: string
+      example: 123
       title: string
     timestamptz:
       type: string
