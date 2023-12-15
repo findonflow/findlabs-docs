@@ -2,8 +2,8 @@ openapi: 3.0.0
 security: []
 info:
   description: An Api to allow users to fetch historical data form the findlabs database. All timestamps are in UTC.
-  title:  Flowdiver historical API
-  version: 1.0.0
+  title:  FindLabs historical API
+  version: 1.1.0
   contact:
     name: FindLabs Support
     email: support@findlabs.io
@@ -306,7 +306,7 @@ paths:
   /node_rewards:
     get:
       operationId: nodeRewards
-      summary: Staking rewards
+      summary: Node Staking rewards
       description: >-
         Get taking reward for a node operator for a given time
       parameters:
