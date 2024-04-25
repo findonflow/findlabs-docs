@@ -1,9 +1,17 @@
 openapi: 3.0.0
 info:
   title: Findlabs Defi API
+  description: DexScreener compliant API for DeFi data.
   version: 1.0.0
 servers:
   - url: https://qn.findlabs.io
+contact:
+  name: FindLabs Support
+  email: support@findlabs.io
+  url: http://roadmap.findlabs.io
+license:
+  name: Apache 2.0
+  url: http://www.apache.org/licenses/LICENSE-2.0.html
 paths:
   /defi/latest-block:
     get:
