@@ -1,0 +1,111 @@
+openapi: 3.0.0
+info:
+  title: Findlabs Defi API
+  version: 1.0.0
+servers:
+  - url: https://qn.findlabs.io
+paths:
+  /defi/latest-block:
+    get:
+      tags:
+        - default
+      summary: Get Latest Block
+      parameters:
+        - name: X-QN-QUICKNODE-ID
+          in: header
+          schema:
+            type: string
+          example: 9469f6bfc411b1c23f0f3677bcd22b890a4a755273dc2c0ad38559f7e1eb2700
+        - name: X-INSTANCE-ID
+          in: header
+          schema:
+            type: string
+          example: 2c03e048-5778-4944-b804-0de77df9363a
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /defi/asset:
+    get:
+      tags:
+        - default
+      summary: Get Asset
+      parameters:
+        - name: X-QN-QUICKNODE-ID
+          in: header
+          schema:
+            type: string
+          example: 9469f6bfc411b1c23f0f3677bcd22b890a4a755273dc2c0ad38559f7e1eb2700
+        - name: X-INSTANCE-ID
+          in: header
+          schema:
+            type: string
+          example: 2c03e048-5778-4944-b804-0de77df9363a
+        - name: id
+          in: query
+          schema:
+            type: string
+          example: A.687e1a7aef17b78b.Beaver.Vault
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /defi/pair:
+    get:
+      tags:
+        - default
+      summary: Get Pair
+      parameters:
+        - name: X-QN-QUICKNODE-ID
+          in: header
+          schema:
+            type: string
+          example: 9469f6bfc411b1c23f0f3677bcd22b890a4a755273dc2c0ad38559f7e1eb2700
+        - name: X-INSTANCE-ID
+          in: header
+          schema:
+            type: string
+          example: 2c03e048-5778-4944-b804-0de77df9363a
+        - name: id
+          in: query
+          schema:
+            type: string
+          example: A.f74f589351b3b55d.SwapPair.Vault
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /defi/event:
+    get:
+      tags:
+        - default
+      summary: Get Events
+      parameters:
+        - name: X-QN-QUICKNODE-ID
+          in: header
+          schema:
+            type: string
+          example: 9469f6bfc411b1c23f0f3677bcd22b890a4a755273dc2c0ad38559f7e1eb2700
+        - name: X-INSTANCE-ID
+          in: header
+          schema:
+            type: string
+          example: 2c03e048-5778-4944-b804-0de77df9363a
+        - name: fromBlock
+          in: query
+          schema:
+            type: integer
+          example: "67100581"
+        - name: toBlock
+          in: query
+          schema:
+            type: integer
+          example: "67100587"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
