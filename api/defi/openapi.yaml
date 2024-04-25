@@ -4,7 +4,7 @@ info:
   description: DexScreener compliant API for DeFi data.
   version: 1.0.0
 servers:
-  - url: https://qn.findlabs.io
+  - url: https://YOUR_QUICKNODE_ENDPOINT_HERE.com/addon/670/defi
 contact:
   name: FindLabs Support
   email: support@findlabs.io
@@ -13,7 +13,7 @@ license:
   name: Apache 2.0
   url: http://www.apache.org/licenses/LICENSE-2.0.html
 paths:
-  /defi/latest-block:
+  /latest-block:
     get:
       tags:
         - default
@@ -23,7 +23,7 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /defi/asset:
+  /asset:
     get:
       tags:
         - default
@@ -39,7 +39,7 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /defi/pair:
+  /pair:
     get:
       tags:
         - default
@@ -55,7 +55,7 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /defi/event:
+  /event:
     get:
       tags:
         - default
