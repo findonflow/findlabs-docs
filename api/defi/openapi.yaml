@@ -16,7 +16,7 @@ paths:
   /latest-block:
     get:
       tags:
-        - default
+        - DeFi
       summary: Get Latest Block
       responses:
         "200":
@@ -26,7 +26,7 @@ paths:
   /asset:
     get:
       tags:
-        - default
+        - DeFi
       summary: Get Asset
       parameters:
         - name: id
@@ -42,7 +42,7 @@ paths:
   /pair:
     get:
       tags:
-        - default
+        - DeFi
       summary: Get Pair
       parameters:
         - name: id
@@ -58,7 +58,7 @@ paths:
   /event:
     get:
       tags:
-        - default
+        - DeFi
       summary: Get Events
       parameters:
         - name: fromBlock
