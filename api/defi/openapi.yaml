@@ -11,16 +11,6 @@ paths:
         - default
       summary: Get Latest Block
       parameters:
-        - name: X-QN-QUICKNODE-ID
-          in: header
-          schema:
-            type: string
-          example: 9469f6bfc411b1c23f0f3677bcd22b890a4a755273dc2c0ad38559f7e1eb2700
-        - name: X-INSTANCE-ID
-          in: header
-          schema:
-            type: string
-          example: 2c03e048-5778-4944-b804-0de77df9363a
       responses:
         "200":
           description: Successful response
@@ -32,16 +22,6 @@ paths:
         - default
       summary: Get Asset
       parameters:
-        - name: X-QN-QUICKNODE-ID
-          in: header
-          schema:
-            type: string
-          example: 9469f6bfc411b1c23f0f3677bcd22b890a4a755273dc2c0ad38559f7e1eb2700
-        - name: X-INSTANCE-ID
-          in: header
-          schema:
-            type: string
-          example: 2c03e048-5778-4944-b804-0de77df9363a
         - name: id
           in: query
           schema:
@@ -58,16 +38,6 @@ paths:
         - default
       summary: Get Pair
       parameters:
-        - name: X-QN-QUICKNODE-ID
-          in: header
-          schema:
-            type: string
-          example: 9469f6bfc411b1c23f0f3677bcd22b890a4a755273dc2c0ad38559f7e1eb2700
-        - name: X-INSTANCE-ID
-          in: header
-          schema:
-            type: string
-          example: 2c03e048-5778-4944-b804-0de77df9363a
         - name: id
           in: query
           schema:
@@ -84,16 +54,6 @@ paths:
         - default
       summary: Get Events
       parameters:
-        - name: X-QN-QUICKNODE-ID
-          in: header
-          schema:
-            type: string
-          example: 9469f6bfc411b1c23f0f3677bcd22b890a4a755273dc2c0ad38559f7e1eb2700
-        - name: X-INSTANCE-ID
-          in: header
-          schema:
-            type: string
-          example: 2c03e048-5778-4944-b804-0de77df9363a
         - name: fromBlock
           in: query
           schema:
