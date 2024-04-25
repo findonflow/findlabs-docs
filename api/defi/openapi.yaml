@@ -10,7 +10,6 @@ paths:
       tags:
         - default
       summary: Get Latest Block
-      parameters:
       responses:
         "200":
           description: Successful response
