@@ -8,9 +8,10 @@ servers:
 paths:
   /latest-block:
     get:
+      summary: Get Latest Block
+      description: "Fetch latest processed block, which contains information about recent swap events."
       tags:
         - DeFi
-      summary: Get Latest Block
       responses:
         "200":
           description: Successful response
@@ -20,28 +21,28 @@ paths:
                 $ref: '#/components/schemas/Block'
   /asset:
     get:
+      summary: Get Asset
+      description: Fetch asset by 'id' query param
       tags:
         - DeFi
-      summary: Get Asset
       parameters:
         - name: id
           required: true
           in: query
           schema:
             type: string
+            pattern: ^A\.[\w\d]*\.[\w\d]*\.[\w\d]+$
           example: A.687e1a7aef17b78b.Beaver.Vault
       responses:
         "400":
-          description: Invalid query
+          description: Invalid request
           content:
             application/json:
               schema:
                 properties:
                   message:
                     type: string
-                    default: Missing "id" param
-
-
+                    default: Missing 'id' param
         "200":
           description: Successful response
           content:
@@ -50,17 +51,27 @@ paths:
                 $ref: '#/components/schemas/Asset'
   /pair:
     get:
+      summary: Get Pair
+      description: Fetch swap pair by 'id' query param
       tags:
         - DeFi
-      summary: Get Pair
       parameters:
         - name: id
-          in: query
           required: true
+          in: query
           schema:
             type: string
+            pattern: ^A\.[\w\d]*\.[\w\d]*\.[\w\d]+$
           example: A.f74f589351b3b55d.SwapPair.Vault
       responses:
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
         "200":
           description: Successful response
           content:
@@ -72,6 +83,7 @@ paths:
       tags:
         - DeFi
       summary: Get Events
+      description: Fetch a list of events in a specifi block range
       parameters:
         - name: fromBlock
           in: query
@@ -86,6 +98,25 @@ paths:
             type: integer
           example: "67100587"
       responses:
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              examples:
+                missing-from-block:
+                  description: Query param `fromBlock` should always be present
+                  summary: Missing `fromBlock` query param
+                  value:
+                    message: Missing 'fromBlock' param
+                missing-to-block:
+                  description: Query param `toBlock` should always be present
+                  summary: Missing `toBlock` query param
+                  value:
+                    message: Missing 'toBlock' param
+              schema:
+                properties:
+                  message:
+                    type: string
         "200":
           description: Successful response
           content:
