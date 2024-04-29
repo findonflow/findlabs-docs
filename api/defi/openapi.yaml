@@ -5,13 +5,6 @@ info:
   version: 1.0.0
 servers:
   - url: https://YOUR_QUICKNODE_ENDPOINT_HERE.com/addon/670/defi
-contact:
-  name: FindLabs Support
-  email: support@findlabs.io
-  url: http://roadmap.findlabs.io
-license:
-  name: Apache 2.0
-  url: http://www.apache.org/licenses/LICENSE-2.0.html
 paths:
   /latest-block:
     get:
@@ -22,7 +15,9 @@ paths:
         "200":
           description: Successful response
           content:
-            application/json: {}
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Block'
   /asset:
     get:
       tags:
@@ -30,15 +25,29 @@ paths:
       summary: Get Asset
       parameters:
         - name: id
+          required: true
           in: query
           schema:
             type: string
           example: A.687e1a7aef17b78b.Beaver.Vault
       responses:
+        "400":
+          description: Invalid query
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    default: Missing "id" param
+
+
         "200":
           description: Successful response
           content:
-            application/json: {}
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asset'
   /pair:
     get:
       tags:
@@ -47,6 +56,7 @@ paths:
       parameters:
         - name: id
           in: query
+          required: true
           schema:
             type: string
           example: A.f74f589351b3b55d.SwapPair.Vault
@@ -54,7 +64,9 @@ paths:
         "200":
           description: Successful response
           content:
-            application/json: {}
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pair"
   /event:
     get:
       tags:
@@ -63,10 +75,12 @@ paths:
       parameters:
         - name: fromBlock
           in: query
+          required: true
           schema:
             type: integer
           example: "67100581"
         - name: toBlock
+          required: true
           in: query
           schema:
             type: integer
@@ -75,4 +89,286 @@ paths:
         "200":
           description: Successful response
           content:
-            application/json: {}
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/EventData'
+                type: array
+
+components:
+  schemas:
+    Asset:
+      properties:
+        id:
+          title: Asset.id
+          type: string
+        name:
+          title: Asset.name
+          type: string
+        symbol:
+          title: Asset.symbol
+          type: string
+        totalSupply:
+          title: Asset.totalSupply
+          anyOf:
+            - type: string
+            - type: number
+        circulatingSupply:
+          title: Asset.circulatingSupply
+          anyOf:
+            - type: string
+            - type: number
+        coinGeckoId:
+          title: Asset.coinGeckoId
+          type: string
+        coinMarketCapId:
+          title: Asset.coinMarketCapId
+          type: string
+        metadata:
+          title: Asset.metadata
+      required:
+        - id
+        - name
+        - symbol
+      additionalProperties: false
+      title: Asset
+      type: object
+    Pair:
+      properties:
+        id:
+          title: Pair.id
+          type: string
+        dexKey:
+          title: Pair.dexKey
+          type: string
+        asset0Id:
+          title: Pair.asset0Id
+          type: string
+        asset1Id:
+          title: Pair.asset1Id
+          type: string
+        createdAtBlockNumber:
+          title: Pair.createdAtBlockNumber
+          type: number
+        createdAtBlockTimestamp:
+          title: Pair.createdAtBlockTimestamp
+          type: number
+        createdAtTxnId:
+          title: Pair.createdAtTxnId
+          type: string
+        feeBps:
+          title: Pair.feeBps
+          type: number
+        pool:
+          properties:
+            id:
+              title: Pair.pool.id
+              type: string
+            name:
+              title: Pair.pool.name
+              type: string
+            assetIds:
+              items:
+                title: Pair.pool.assetIds.[]
+                type: string
+              title: Pair.pool.assetIds
+              type: array
+            pairIds:
+              items:
+                title: Pair.pool.pairIds.[]
+                type: string
+              title: Pair.pool.pairIds
+              type: array
+            metadata:
+              title: Pair.pool.metadata
+          required:
+            - id
+            - name
+            - assetIds
+            - pairIds
+          additionalProperties: false
+          title: Pair.pool
+          type: object
+        metadata:
+          title: Pair.metadata
+      required:
+        - id
+        - dexKey
+        - asset0Id
+        - asset1Id
+      additionalProperties: false
+      title: Pair
+      type: object
+    Block:
+      properties:
+        blockNumber:
+          title: Block.blockNumber
+          type: number
+        blockTimestamp:
+          title: Block.blockTimestamp
+          type: number
+        metadata:
+          title: Block.metadata
+      required:
+        - blockNumber
+        - blockTimestamp
+      additionalProperties: false
+      title: Block
+      type: object
+    SwapEvent:
+      properties:
+        eventType:
+          title: SwapEvent.eventType
+          enum:
+            - swap
+          type: string
+        txnId:
+          title: SwapEvent.txnId
+          type: string
+        txnIndex:
+          title: SwapEvent.txnIndex
+          type: number
+        eventIndex:
+          title: SwapEvent.eventIndex
+          type: number
+        maker:
+          title: SwapEvent.maker
+          type: string
+        pairId:
+          title: SwapEvent.pairId
+          type: string
+        asset0In:
+          title: SwapEvent.asset0In
+          anyOf:
+            - type: number
+            - type: string
+        asset1In:
+          title: SwapEvent.asset1In
+          anyOf:
+            - type: number
+            - type: string
+        asset0Out:
+          title: SwapEvent.asset0Out
+          anyOf:
+            - type: number
+            - type: string
+        asset1Out:
+          title: SwapEvent.asset1Out
+          anyOf:
+            - type: number
+            - type: string
+        priceNative:
+          title: SwapEvent.priceNative
+          anyOf:
+            - type: number
+            - type: string
+        reserves:
+          properties:
+            asset0:
+              title: SwapEvent.reserves.asset0
+              anyOf:
+                - type: number
+                - type: string
+            asset1:
+              title: SwapEvent.reserves.asset1
+              anyOf:
+                - type: number
+                - type: string
+          required:
+            - asset0
+            - asset1
+          additionalProperties: false
+          title: SwapEvent.reserves
+          type: object
+        metadata:
+          title: SwapEvent.metadata
+      required:
+        - eventType
+        - txnId
+        - txnIndex
+        - eventIndex
+        - maker
+        - pairId
+        - priceNative
+      additionalProperties: false
+      title: SwapEvent
+      type: object
+    JoinExitEvent:
+      properties:
+        eventType:
+          enum:
+            - join
+            - exit
+          title: JoinExitEvent.eventType
+          type: string
+        txnId:
+          title: JoinExitEvent.txnId
+          type: string
+        txnIndex:
+          title: JoinExitEvent.txnIndex
+          type: number
+        eventIndex:
+          title: JoinExitEvent.eventIndex
+          type: number
+        maker:
+          title: JoinExitEvent.maker
+          type: string
+        pairId:
+          title: JoinExitEvent.pairId
+          type: string
+        amount0:
+          title: JoinExitEvent.amount0
+          anyOf:
+            - type: number
+            - type: string
+        amount1:
+          title: JoinExitEvent.amount1
+          anyOf:
+            - type: number
+            - type: string
+        reserves:
+          properties:
+            asset0:
+              title: JoinExitEvent.reserves.asset0
+              anyOf:
+                - type: number
+                - type: string
+            asset1:
+              title: JoinExitEvent.reserves.asset1
+              anyOf:
+                - type: number
+                - type: string
+          required:
+            - asset0
+            - asset1
+          additionalProperties: false
+          title: JoinExitEvent.reserves
+          type: object
+        metadata:
+          title: JoinExitEvent.metadata
+      required:
+        - eventType
+        - txnId
+        - txnIndex
+        - eventIndex
+        - maker
+        - pairId
+        - amount0
+        - amount1
+      additionalProperties: false
+      title: JoinExitEvent
+      type: object
+    EventData:
+      allOf:
+        - properties:
+            block:
+              $ref: '#/components/schemas/Block'
+          required:
+            - block
+          additionalProperties: false
+          type: object
+        - anyOf:
+            - $ref: '#/components/schemas/SwapEvent'
+            - $ref: '#/components/schemas/JoinExitEvent'
+      title: EventData
+
