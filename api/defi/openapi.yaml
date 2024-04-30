@@ -87,7 +87,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Pair"
-  /event:
+  /events:
     get:
       tags:
         - DeFi
