@@ -8,7 +8,7 @@ servers:
 paths:
   /latest-block:
     get:
-      summary: Get Latest Block
+      summary: Get latest block
       description: "Fetch latest processed block, which contains information about recent swap events."
       tags:
         - DeFi
@@ -21,7 +21,7 @@ paths:
                 $ref: '#/components/schemas/Block'
   /asset:
     get:
-      summary: Get Asset
+      summary: Get asset
       description: Fetch asset by 'id' query param
       tags:
         - DeFi
@@ -51,8 +51,8 @@ paths:
                 $ref: '#/components/schemas/Asset'
   /pair:
     get:
-      summary: Get Pair
-      description: Fetch swap pair by 'id' query param
+      summary: Get swap pair
+      description: Fetch swap pair by `id` query param
       tags:
         - DeFi
       parameters:
@@ -68,6 +68,15 @@ paths:
           description: Invalid request
           content:
             application/json:
+              examples:
+                Missing Id:
+                  description: id param is missing, check that you are passing it as search param
+                  value:
+                    message: Missing "id" param
+                Invalid Id:
+                  description: Param `id` doesn't comply to requested pattern
+                  value:
+                    message: Invalid `id` param
               schema:
                 properties:
                   message:
@@ -82,7 +91,7 @@ paths:
     get:
       tags:
         - DeFi
-      summary: Get Events
+      summary: Get swap events
       description: Fetch a list of events in a specifi block range
       parameters:
         - name: fromBlock
@@ -103,16 +112,30 @@ paths:
           content:
             application/json:
               examples:
-                missing-from-block:
-                  description: Query param `fromBlock` should always be present
-                  summary: Missing `fromBlock` query param
+                Missing fromBlock param:
+                  description: Query param `fromBlock` should be present in search params
                   value:
                     message: Missing 'fromBlock' param
-                missing-to-block:
-                  description: Query param `toBlock` should always be present
-                  summary: Missing `toBlock` query param
+                Missing toBlock param:
+                  description: Query param `toBlock` should should be present in search params
                   value:
                     message: Missing 'toBlock' param
+                Param fromBlock is not a number:
+                  description: Param `fromBlock` param is not correct integer value
+                  value:
+                    message: Param "fromBlock" is not correct integer value
+                Param toBlock is not a number:
+                  description: Param `toBlock` param is not correct integer value
+                  value:
+                    message: Param "toBlock" is not correct integer value
+                Param fromBlock is bigger:
+                  description: Check that fromBlock value is smaller than toBlock value
+                  value:
+                    message: fromBlock value is bigger than toBlock value
+                Range overflow:
+                  description: The difference between fromBlock and toBlock should be smaller than allowed range, defined by your subscription plan
+                  value:
+                    message: fromBlock" can't be more than <ALLOWED_RANGE> blocks apart from "toBlock
               schema:
                 properties:
                   message:
